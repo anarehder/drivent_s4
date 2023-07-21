@@ -32,6 +32,12 @@ export function handleApplicationErrors(
     });
   }
 
+  if (err.name === 'BookingError') {
+    return res.status(httpStatus.FORBIDDEN).send({
+      message: err.message,
+    });
+  }
+
   if (err.name === 'NotFoundError') {
     return res.status(httpStatus.NOT_FOUND).send({
       message: err.message,
