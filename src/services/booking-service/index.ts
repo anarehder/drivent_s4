@@ -7,20 +7,16 @@ import ticketsRepository from '@/repositories/tickets-repository';
 async function verifyTicketAndEnrollment(userId: number) {
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
   if (!enrollment) throw bookingError();
-  // tem inscricao? (404 - not found) - OK
-  const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id); // já vem o ticket type junto
+  const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
   if (!ticket) throw bookingError();
-  // tem ticket? (404 - not found) - OK
-  // tem hotel? (404 - not found)
   if (ticket.status !== 'PAID') throw bookingError();
   if (ticket.TicketType.isRemote === true) throw bookingError();
   if (ticket.TicketType.includesHotel === false) throw bookingError();
-  //ticket foi pago? é remoto? não inclui hotel? (402 - payment required) - OK
 }
 
 async function verifyCapacity(roomId: number) {
   const room = await bookingRepository.findRoomsById(roomId);
-  if (!room) throw notFoundError;
+  if (!room) throw notFoundError();
   const bookedRooms = await bookingRepository.findBookingsByRoomId(roomId);
   if (bookedRooms.length >= room.capacity) throw bookingError();
 }
@@ -32,8 +28,8 @@ async function getBookingService(userId: number) {
 }
 
 async function postBookingService(userId: number, roomId: number) {
-  await verifyCapacity(roomId);
   await verifyTicketAndEnrollment(userId);
+  await verifyCapacity(roomId);
   const booking = await bookingRepository.postBookingDB(userId, roomId);
   return booking;
 }
