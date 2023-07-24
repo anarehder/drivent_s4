@@ -60,14 +60,13 @@ async function postBookingDB(userId: number, roomId: number): Promise<Booking> {
 }
 
 async function editBookingDB(roomId: number, bookingId: number): Promise<Booking> {
-  return prisma.booking.upsert({
+  return prisma.booking.update({
     where: {
       id: bookingId,
     },
-    update: {
+    data: {
       roomId,
     },
-    create: undefined,
   });
 }
 

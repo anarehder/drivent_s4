@@ -45,14 +45,6 @@ export async function editBooking(req: AuthenticatedRequest, res: Response) {
     const response = { bookingId: booking.id };
     return res.status(httpStatus.OK).send(response);
   } catch (error) {
-    if (error.name === 'NotFoundError') {
-      if (error.name === 'NotFoundError') {
-        return res.sendStatus(httpStatus.NOT_FOUND);
-      }
-      if (error.name === 'NotFoundError') return res.sendStatus(httpStatus.NOT_FOUND);
-      if (error.name === 'BookingError') return res.sendStatus(httpStatus.FORBIDDEN);
-      return res.sendStatus(httpStatus.BAD_REQUEST);
-    }
     if (error.name === 'NotFoundError') return res.sendStatus(httpStatus.NOT_FOUND);
     if (error.name === 'BookingError') return res.sendStatus(httpStatus.FORBIDDEN);
     return res.sendStatus(httpStatus.BAD_REQUEST);
