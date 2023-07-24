@@ -26,15 +26,14 @@ async function verifyCapacity(roomId: number) {
 }
 
 async function getBookingService(userId: number) {
-  //await verifyTicketAndEnrollment(userId);
   const booking = await bookingRepository.getBookingByUserIdDB(userId);
-  if (!booking) throw notFoundError;
+  if (!booking) throw notFoundError();
   return booking;
 }
 
 async function postBookingService(userId: number, roomId: number) {
   await verifyCapacity(roomId);
-  //await verifyTicketAndEnrollment(userId);
+  await verifyTicketAndEnrollment(userId);
   const booking = await bookingRepository.postBookingDB(userId, roomId);
   return booking;
 }
